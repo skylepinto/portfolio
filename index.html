@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Skyle | Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+     :root {
+  /* Wine red + deep red on soft light base */
+  --bg: #fff7f7;                 /* almost white with a hint of red */
+  --bg-alt: #fff0f2;             /* slightly stronger tint */
+
+  --card: rgba(255, 255, 255, 0.98);
+
+  --text-main: #111827;          /* dark neutral for readability */
+  --text-sub: #6b7280;
+
+  --accent: #7f1d1d;             /* deep wine red */
+  --accent-soft: rgba(127, 29, 29, 0.14);
+
+  --border-subtle: rgba(127, 29, 29, 0.25);  /* soft wine border */
+  --shadow-soft: 0 20px 45px rgba(127, 29, 29, 0.25);
+}
+
+/* Dark mode partner with same vibe (optional) */
+:root.dark {
+  --bg: #050307;
+  --bg-alt: #09010f;
+
+  --card: rgba(15, 23, 42, 0.96);
+
+  --text-main: #f9fafb;
+  --text-sub: #9ca3af;
+
+  --accent: #b91c1c;             /* strong dark red */
+  --accent-soft: rgba(185, 28, 28, 0.28);
+
+  --border-subtle: rgba(248, 113, 113, 0.4);
+  --shadow-soft: 0 22px 55px rgba(0, 0, 0, 0.75);
+}
+
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      cursor: default;
+    }
+
+    /* Background: gradient + optional video overlay */
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      background: linear-gradient(-45deg, #fef2f2, #fee2e2, #ffe4e6, #fef9c3);
+      background-size: 320% 320%;
+      animation: bgGradient 24s ease infinite;
+      position: relative;
+      overflow-x: hidden;
+    }
+    :root.dark body {
+      background: linear-gradient(-45deg, #020617, #111827, #7f1d1d, #020617);
+      background-size: 320% 320%;
+      animation: bgGradientDark 26s ease infinite;
+    }
+    @keyframes bgGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes bgGradientDark {
+      0% { background-position: 100% 50%; }
+      50% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    /* Fullscreen background video */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      pointer-events: none;
+    }
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(255,245,245,0.85), rgba(255,245,245,0.92));
+      z-index: -1;
+    }
+    :root.dark .bg-overlay {
+      background: linear-gradient(to bottom, rgba(15,23,42,0.85), rgba(15,23,42,0.95));
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 22px 64px;
+    }
+
+    /* Header + nav */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: var(--text-sub);
+    }
+    nav {
+      display: flex;
+      gap: 18px;
+      font-size: 14px;
+      color: var(--text-sub);
+      flex-wrap: wrap;
+    }
+    nav a {
+      position: relative;
+      padding: 6px 10px;
+      border-radius: 999px;
+      transition:
+        transform 0.15s ease-out,
+        background 0.15s ease-out,
+        color 0.15s ease-out,
+        box-shadow 0.15s ease-out;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 3px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.16s ease-out;
+    }
+    nav a:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+      transform: translateY(-1px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.22);
+    }
+    nav a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-alt);
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+      transition:
+        transform 0.15s ease-out,
+        box-shadow 0.15s ease-out,
+        background 0.15s ease-out;
+    }
+    .theme-toggle:hover {
+      transform: translateY(-1px) scale(1.04);
+      background: var(--accent-soft);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+    }
+
+    /* Page transition blocks */
+    .page-transition {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      z-index: 900;
+    }
+    .page-transition__block {
+      transform: translateY(100%);
+      transition: transform 0.7s cubic-bezier(0.77, 0, 0.18, 1);
+    }
+    :root .page-transition__block:nth-child(1) { background: #fee2e2; }
+    :root .page-transition__block:nth-child(2) { background: #fecaca; }
+    :root .page-transition__block:nth-child(3) { background: #fca5a5; }
+    :root .page-transition__block:nth-child(4) { background: #ef4444; }
+    :root.dark .page-transition__block:nth-child(1) { background: #020617; }
+    :root.dark .page-transition__block:nth-child(2) { background: #111827; }
+    :root.dark .page-transition__block:nth-child(3) { background: #7f1d1d; }
+    :root.dark .page-transition__block:nth-child(4) { background: #450a0a; }
+    .page-transition--active .page-transition__block {
+      transform: translateY(0);
+    }
+    .page-transition--active .page-transition__block:nth-child(2) {
+      transition-delay: 0.05s;
+    }
+    .page-transition--active .page-transition__block:nth-child(3) {
+      transition-delay: 0.1s;
+    }
+    .page-transition--active .page-transition__block:nth-child(4) {
+      transition-delay: 0.15s;
+    }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3.4fr) minmax(0, 2.6fr);
+      gap: 48px;
+      align-items: center;
+      margin-bottom: 64px;
+    }
+    .hero-intro {
+      font-size: 14px;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      margin-bottom: 14px;
+    }
+    .hero-title {
+      font-size: clamp(40px, 6vw, 50px);
+      font-weight: 750;
+      margin-bottom: 18px;
+    }
+    .hero-sub {
+      color: var(--text-sub);
+      font-size: 15.5px;
+      max-width: 560px;
+      margin-bottom: 24px;
+    }
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+    .tag {
+      padding: 7px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      font-size: 12px;
+      color: var(--text-sub);
+      background: var(--bg-alt);
+    }
+    .tag.primary {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .btn {
+      padding: 11px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition:
+        transform 0.15s ease-out,
+        box-shadow 0.15s ease-out,
+        background 0.15s ease-out;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--text-main);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #ef4444, #fb7185);
+      color: #f9fafb;
+      box-shadow: var(--shadow-soft);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.04);
+    }
+    .btn-ghost {
+      border-color: var(--border-subtle);
+      color: var(--text-sub);
+      background: var(--bg-alt);
+    }
+    .btn-ghost:hover {
+      transform: translateY(-1px) scale(1.03);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .btn:active {
+      transform: translateY(1px) scale(0.97);
+      box-shadow: none;
+    }
+
+    .hero-socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .social-btn {
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      font-size: 12px;
+      color: var(--text-sub);
+      background: var(--bg-alt);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition:
+        transform 0.15s ease-out,
+        background 0.15s ease-out,
+        box-shadow 0.15s ease-out,
+        color 0.15s ease-out;
+    }
+    .social-btn:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.22);
+    }
+
+    .hero-note {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 10px;
+    }
+
+    .hero-card {
+      background: var(--card);
+      border-radius: 28px;
+      border: 1px solid var(--border-subtle);
+      padding: 26px 26px 22px;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 18px;
+    }
+    .hero-card-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      text-align: center;
+    }
+    .hero-avatar {
+      width: 180px;
+      height: 180px;
+      border-radius: 32px;
+      margin: 0 auto;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
+      background: #fecaca;
+    }
+    .hero-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-name {
+      font-size: 22px;
+      font-weight: 650;
+      margin-bottom: 4px;
+    }
+    .hero-role {
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+    .hero-card-main {
+      font-size: 13.5px;
+      color: var(--text-sub);
+      text-align: center;
+    }
+
+    /* SECTIONS */
+    section {
+      margin-bottom: 64px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .section-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    .section-title {
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .section-sub {
+      font-size: 14.5px;
+      color: var(--text-sub);
+      max-width: 480px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      padding: 22px 22px;
+      box-shadow: var(--shadow-soft);
+      transition:
+        transform 0.25s ease-out,
+        box-shadow 0.25s ease-out;
+    }
+    .card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 24px 50px rgba(15, 23, 42, 0.22);
+    }
+
+    .about-columns {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
+      gap: 26px;
+      font-size: 14.5px;
+      color: var(--text-sub);
+    }
+    .about-highlight {
+      color: var(--text-main);
+    }
+
+    .bullet-list {
+      list-style: none;
+      margin-top: 8px;
+      display: grid;
+      gap: 7px;
+      font-size: 13.5px;
+      color: var(--text-sub);
+    }
+    .bullet-list li::before {
+      content: "•";
+      margin-right: 6px;
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    .projects-grid {
+      display: grid;
+      gap: 22px;
+    }
+    @media (min-width: 760px) {
+      .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .project-title {
+      font-size: 15px;
+      font-weight: 560;
+      margin-bottom: 6px;
+    }
+    .project-meta {
+      font-size: 12.5px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .project-tag {
+      font-size: 11.5px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-sub);
+    }
+
+    .skills-grid {
+      display: grid;
+      gap: 18px;
+    }
+    @media (min-width: 760px) {
+      .skills-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    .skills-title {
+      font-size: 14px;
+      font-weight: 560;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg);
+    }
+
+    .goals-list {
+      list-style: none;
+      display: grid;
+      gap: 7px;
+      font-size: 13.5px;
+      color: var(--text-sub);
+    }
+    .goals-list li::before {
+      content: "▹";
+      margin-right: 6px;
+      color: var(--accent);
+      font-size: 11px;
+    }
+
+    .contact-grid {
+      display: grid;
+      gap: 26px;
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+    @media (min-width: 720px) {
+      .contact-grid {
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.3fr);
+      }
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 13.5px;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg);
+      color: var(--text-main);
+      font-size: 13.5px;
+      outline: none;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* Gallery (Pinterest-style masonry) */
+    .gallery-section {
+      margin-bottom: 64px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .gallery {
+      column-count: 4;
+      column-gap: 18px;
+    }
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
+      transform: translateY(24px);
+      opacity: 0;
+      transition:
+        transform 0.6s cubic-bezier(0.19, 1, 0.22, 1),
+        opacity 0.6s ease;
+    }
+    .gallery-item.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .gallery-item img,
+    .gallery-item video {
+      width: 100%;
+      display: block;
+      transition: transform 0.25s ease-out;
+    }
+    .gallery-item:hover img,
+    .gallery-item:hover video {
+      transform: scale(1.05);
+    }
+    .gallery-item::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15,23,42,0.25), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .gallery-item:hover::after {
+      opacity: 1;
+    }
+
+    /* Scroll reveal + slide directions */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition:
+        opacity 0.5s ease-out,
+        transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .slide-left {
+      transform: translateX(-80px);
+    }
+    .slide-right {
+      transform: translateX(80px);
+    }
+    .visible.slide-left,
+    .visible.slide-right {
+      transform: translateX(0);
+    }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+
+    footer {
+      margin-top: 32px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 12px;
+      color: var(--text-sub);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-card {
+        max-width: 440px;
+        margin: 0 auto;
+      }
+    }
+    @media (max-width: 780px) {
+      .about-columns {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .projects-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .skills-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 900px) {
+      .gallery { column-count: 3; }
+    }
+    @media (max-width: 700px) {
+      .gallery { column-count: 2; }
+    }
+    @media (max-width: 520px) {
+      .gallery { column-count: 1; }
+    }
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background video (approx lines 120–135) -->
+  <!-- Put your video file at videos/background.mp4 or change the src -->
+  <video id="bg-video" src="videos/background.mp4" muted loop playsinline></video>
+  <div class="bg-overlay"></div>
+
+  <!-- Page transition overlay -->
+  <div class="page-transition" aria-hidden="true">
+    <div class="page-transition__block"></div>
+    <div class="page-transition__block"></div>
+    <div class="page-transition__block"></div>
+    <div class="page-transition__block"></div>
+  </div>
+
+  <div class="page">
+    <header>
+      <div class="logo">Skyle</div>
+      <nav>
+        <a href="#hero">Home</a>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#skills">Skills</a>
+        <a href="#goals">Goals</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-label">Dark</span>
+      </button>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section id="hero" class="hero reveal slide-left">
+        <div>
+          <div class="hero-intro">Computer Engineering · CRCE</div>
+          <h1 class="hero-title">Skyle Pinto</h1>
+          <p class="hero-sub">
+            Computer Engineering student at Fr. Conceicao Rodrigues College of Engineering (CRCE), Bandra, exploring programming, web development, photography, and video editing.
+          </p>
+
+          <div class="hero-tags">
+            <span class="tag primary">Computer Engineering</span>
+            <span class="tag">Programming basics</span>
+            <span class="tag">Web development</span>
+            <span class="tag">Photography & reels</span>
+          </div>
+
+          <div class="hero-actions">
+            <a href="#projects" class="btn btn-primary">View projects & plans</a>
+            <a href="#contact" class="btn btn-ghost">Contact me</a>
+          </div>
+
+          <div class="hero-socials">
+            <a class="social-btn" href="https://github.com/skylepinto" target="_blank">GitHub</a>
+            <a class="social-btn" href="https://www.linkedin.com/in/skylepinto" target="_blank">LinkedIn</a>
+            <a class="social-btn" href="https://instagram.com/sk3yle" target="_blank">Instagram</a>
+          </div>
+
+          <div class="hero-note">
+            Open to assignments, college projects, and creative collaborations that combine tech and visuals.
+          </div>
+        </div>
+
+        <aside class="hero-card reveal slide-right delay-1" aria-label="Profile">
+          <div class="hero-card-top">
+            <div class="hero-avatar">
+              <!-- Put your own image here -->
+              <img src="picture.jpg" alt="Photo of Skyle" />
+            </div>
+            <div>
+              <div class="hero-name">Skyle</div>
+              <div class="hero-role">B.E. Computer Engineering · CRCE</div>
+            </div>
+          </div>
+          <div class="hero-card-main">
+            Figuring my way through college but figuring it out with a lot of photos and videos.
+          </div>
+        </aside>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="reveal slide-right">
+        <div class="section-label">About</div>
+        <div class="section-header">
+          <h2 class="section-title">About me</h2>
+          <p class="section-sub">
+            A Computer Engineering student interested in how systems, visuals, and user experience connect in real projects.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="about-columns">
+            <div>
+              <p>
+                I am currently pursuing <span class="about-highlight">Computer Engineering at Fr. Conceicao Rodrigues College of Engineering (CRCE), Bandra</span>.
+                My academic focus is on building, problem solving, and understanding core computer engineering concepts.
+              </p>
+              <br />
+              <p>
+                Alongside academics, I enjoy exploring front-end layouts, experimenting with design ideas, and applying what I learn to small, practical projects.
+              </p>
+            </div>
+            <div>
+              <p class="about-highlight">Academic & hobby focus</p>
+              <ul class="bullet-list">
+                <li>Core programming and structured problem solving.</li>
+                <li>Basic web development using HTML, CSS, and JavaScript.</li>
+                <li>Photography of campus, streets, and portraits with attention to composition.</li>
+                <li>Video editing and short-form content using Lightroom, Premiere Pro, and CapCut.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects" class="reveal slide-left">
+        <div class="section-label">Projects</div>
+        <div class="section-header">
+          <h2 class="section-title">Projects & concepts</h2>
+          <p class="section-sub">
+            A mix of current work and planned ideas that connect classroom concepts with creative output.
+          </p>
+        </div>
+
+        <div class="projects-grid">
+          <div class="card reveal slide-left delay-1">
+            <div class="project-title">Personal portfolio website</div>
+            <div class="project-meta">Web · Ongoing</div>
+            <p style="font-size:13.5px;color:var(--text-sub);">
+              A responsive single-page portfolio designed for college, showcasing academic information, skills, and creative work with a light/dark theme and smooth animations.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag">HTML</span>
+              <span class="project-tag">CSS</span>
+              <span class="project-tag">JavaScript</span>
+            </div>
+          </div>
+
+          <div class="card reveal slide-right delay-2">
+            <div class="project-title">Campus photography collection</div>
+            <div class="project-meta">Photography · Personal</div>
+            <p style="font-size:13.5px;color:var(--text-sub);">
+              A collection of images capturing campus life and everyday details, used to practise framing, lighting, and color grading.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag">Photography</span>
+              <span class="project-tag">Lightroom</span>
+              <span class="project-tag">Premiere Pro / CapCut</span>
+            </div>
+          </div>
+
+          <div class="card reveal slide-left delay-1">
+            <div class="project-title">Study & content workflow</div>
+            <div class="project-meta">Organisation · Personal</div>
+            <p style="font-size:13.5px;color:var(--text-sub);">
+              A simple structure for managing notes, resources, photos, and editing tasks in one place to balance academic and creative work.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag">Planning</span>
+              <span class="project-tag">Content management</span>
+            </div>
+          </div>
+
+          <div class="card reveal slide-right delay-2">
+            <div class="project-title"> Mini games on html</div>
+            <div class="project-meta">Concept · Planned</div>
+            <p style="font-size:13.5px;color:var(--text-sub);">
+              An idea for a small web project that connects moods or themes to playlists and visual references, combining coding with media and design.
+            </p>
+            <div class="project-tags">
+              <span class="project-tag">Web concepts</span>
+              <span class="project-tag">Storyboarding</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GALLERY -->
+      <section id="gallery" class="gallery-section reveal slide-right">
+        <div class="section-label">Gallery</div>
+        <div class="section-header">
+          <h2 class="section-title">Photo & reel stills</h2>
+          <p class="section-sub">
+            A Pinterest-style collage of selected images and short clips using varied portrait dimensions.
+          </p>
+        </div>
+
+        <div class="gallery">
+          <!-- Images and 5 videos, exported in portrait-ish sizes -->
+          <div class="gallery-item">
+            <img src="sanjay gandhi national park sgnp cycling sunmer….jpg" alt="Gallery image 1" loading="lazy" />
+          </div>
+
+          <div class="gallery-item">
+            <video
+              src="confo.mp4"
+              class="gallery-video"
+              muted
+              loop
+              playsinline
+            ></video>
+          </div>
+
+          <div class="gallery-item">
+            <img src="desert safari , sharjah.jpg" alt="Gallery image 2" loading="lazy" />
+          </div>
+
+          <div class="gallery-item">
+            <video
+              src="bday.mp4"
+              class="gallery-video"
+              muted
+              loop
+              playsinline
+            ></video>
+          </div>
+
+          <div class="gallery-item">
+            <img src="st xavs.jpg" alt="Gallery image 3" loading="lazy" />
+          </div>
+
+          <div class="gallery-item">
+            <video
+              src="sxc25.mp4"
+              class="gallery-video"
+              muted
+              loop
+              playsinline
+            ></video>
+          </div>
+
+          <div class="gallery-item">
+            <img src="ocean beach lovely water.jpg" alt="Gallery image 4" loading="lazy" />
+          </div>
+
+          <div class="gallery-item">
+            <video
+              src="living.mp4"
+              class="gallery-video"
+              muted
+              loop
+              playsinline
+            ></video>
+          </div>
+
+          <div class="gallery-item">
+            <img src="bodiem church views go hard.jpg" alt="Gallery image 5" loading="lazy" />
+          </div>
+
+          <div class="gallery-item">
+            <video
+              src="dub.mp4"
+              class="gallery-video"
+              muted
+              loop
+              playsinline
+            ></video>
+          </div>
+
+          <div class="gallery-item">
+            <img src="birkin.jpeg" alt="Gallery image 6" loading="lazy" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills" class="reveal slide-left">
+        <div class="section-label">Skills</div>
+        <div class="section-header">
+          <h2 class="section-title">Skills & tools</h2>
+          <p class="section-sub">
+            Technical skills from coursework plus creative tools used in personal projects.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="skills-grid">
+            <div class="reveal slide-left delay-1">
+              <div class="skills-title">Technical skills</div>
+              <div class="chips">
+                <span class="chip">Programming: C , C++</span>
+                <span class="chip">Basic Web: HTML, CSS</span>
+                <span class="chip">Javascript</span>
+                <span class="chip">PHP</span>
+              </div>
+            </div>
+            <div class="reveal slide-right delay-2">
+              <div class="skills-title">Creative tools</div>
+              <div class="chips">
+                <span class="chip"> Capcut</span>
+                <span class="chip">Davinci Resolve</span>
+                <span class="chip">Social Media</span>
+                <span class="chip">Editing workflow</span>
+              </div>
+            </div>
+            <div class="reveal slide-left delay-3">
+              <div class="skills-title">Interests & focus</div>
+              <div class="chips">
+                <span class="chip">Photography</span>
+                <span class="chip">Videography and video editing</span>
+                <span class="chip">Technology and coding</span>
+                <span class="chip">Music and playlists</span>
+                <span class="chip">Fitness and sports</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GOALS -->
+      <section id="goals" class="reveal slide-right">
+        <div class="section-label">Goals</div>
+        <div class="section-header">
+          <h2 class="section-title">Goals for college</h2>
+          <p class="section-sub">
+            A few clear directions to guide how learning and projects grow each semester.
+          </p>
+        </div>
+
+        <div class="card">
+          <ul class="goals-list">
+            <li>Develop strong fundamentals in Computer Engineering and programming.</li>
+            <li>Improve web development skills through small but consistent projects.</li>
+            <li>Build a recognisable photography and video editing style.</li>
+            <li>Create a portfolio that reflects both technical and creative skills.</li>
+            <li>Collaborate on college projects involving media, design, or coding.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="reveal slide-left">
+        <div class="section-label">Contact</div>
+        <div class="section-header">
+          <h2 class="section-title">Contact & collaboration</h2>
+          <p class="section-sub">
+            Use the form or social links to reach out for assignments, projects, or creative work.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="contact-grid">
+            <div class="reveal slide-left delay-1">
+              <p style="margin-bottom:12px;">
+                You can use this contact form for project ideas, collaboration, or assignment-related work. All submissions are sent directly to my email.
+              </p>
+              <div class="hero-socials" style="margin-top:10px;">
+                <a class="social-btn" href="https://github.com/skylepinto" target="_blank">GitHub</a>
+                <a class="social-btn" href="https://www.linkedin.com/in/skylepinto" target="_blank">LinkedIn</a>
+                <a class="social-btn" href="https://instagram.com/sk3yle" target="_blank">Instagram</a>
+              </div>
+            </div>
+
+            <div class="reveal slide-right delay-2">
+              <form action="https://formsubmit.co/sk3ylepinto@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="New message from portfolio site">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="false">
+
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input id="name" name="name" type="text" required placeholder="Your full name" />
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" required placeholder="you@example.com" />
+                </div>
+                <div class="form-group">
+                  <label for="reason">Reason</label>
+                  <input id="reason" name="reason" type="text" placeholder="Project, collaboration, assignment, etc." />
+                </div>
+                <div class="form-group">
+                  <label for="message">Message</label>
+                  <textarea id="message" name="message" required placeholder="Write your message here"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Send message</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© <span id="year"></span> Skyle · Portfolio.</span>
+      <span>Built with HTML, CSS & JavaScript .</span>
+    </footer>
+  </div>
+
+  <script>
+    const root = document.documentElement;
+    const toggleBtn = document.getElementById('theme-toggle');
+    const icon = document.getElementById('theme-icon');
+    const label = document.getElementById('theme-label');
+
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        root.classList.add('dark');
+        icon.textContent = '☀️';
+        label.textContent = 'Light';
+      } else {
+        root.classList.remove('dark');
+        icon.textContent = '🌙';
+        label.textContent = 'Dark';
+      }
+      localStorage.setItem('theme', mode);
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const current = root.classList.contains('dark') ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Page transition blocks on nav clicks
+    const transitionOverlay = document.querySelector('.page-transition');
+    const navLinks = document.querySelectorAll('header nav a[href^="#"]');
+
+    function runPageTransition(targetId) {
+      if (!transitionOverlay) return;
+      transitionOverlay.classList.add('page-transition--active');
+
+      setTimeout(() => {
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 450);
+
+      setTimeout(() => {
+        transitionOverlay.classList.remove('page-transition--active');
+      }, 1100);
+    }
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+        e.preventDefault();
+        runPageTransition(href);
+      });
+    });
+
+    // Scroll reveal with enter + exit for .reveal elements
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -10% 0px'
+      }
+    );
+
+    revealElements.forEach((el) => revealObserver.observe(el));
+
+    // Gallery items reveal + autoplay videos
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const galleryObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const item = entry.target;
+          const video = item.querySelector('video');
+
+          if (entry.isIntersecting) {
+            item.classList.add('visible');
+            if (video) {
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                  // Autoplay might be blocked; user can click to start
+                });
+              }
+            }
+          } else {
+            // If you want to pause when not visible, uncomment:
+            // if (video) video.pause();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    galleryItems.forEach((item) => galleryObserver.observe(item));
+
+    // Year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
